@@ -1,5 +1,9 @@
 package ie.gmit.sw.threads;
 
+/* 
+ * this class is used to place charArrays on the 
+ * Blocking queues with their known lengths 
+ */
 public class CharBlock {
 
 	private char[] chars;

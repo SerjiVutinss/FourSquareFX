@@ -32,13 +32,10 @@ public abstract class CharMatrix {
 	// repeatable shuffle based on the supplied long number
 
 	/* The following code is adapted from Collections.shuffle */
-	// Shuffle a 2D square array
-
+	// Shuffle a 2D integer array
 	public static int[][] shuffle(int[][] matrix, long key) {
+		
 		Random rand = new Random(key);
-
-		int size = matrix.length - 1;
-
 		for (int i = matrix.length - 1; i > 0; i--) {
 			for (int j = matrix[i].length - 1; j > 0; j--) {
 				int m = rand.nextInt(i + 1);
@@ -52,30 +49,26 @@ public abstract class CharMatrix {
 		return matrix;
 	}
 
-	// Swap two entries in a 2D array
-	private static void swap(int[][] matrix, int columns, int i, int j) {
-		int tmp = matrix[i / columns][i % columns];
-		matrix[i / columns][i % columns] = matrix[j / columns][j % columns];
-		matrix[j / columns][j % columns] = tmp;
-	}
+//	// Swap two entries in a 2D array
+//	private static void swap(int[][] matrix, int columns, int i, int j) {
+//		int tmp = matrix[i / columns][i % columns];
+//		matrix[i / columns][i % columns] = matrix[j / columns][j % columns];
+//		matrix[j / columns][j % columns] = tmp;
+//	}
 
-	// returns a Tuple with two int elements - find a char code location within
-	// the cleartext matrix
+	// returns an integer array with two elements - find the location of a
+	// character code within the clear text matrix
 	public static int[] getIndices(int charCode) {
 
 		// return array - limit to 2 elements
-		int indices[];
+		int indices[] = new int[2];
 
 		int charIndex = charCode - startCharCode;
 
-		int row, col;
-		// this method may need to be improved if cipher squares are increased in size
-		row = charIndex / squareSize;
-		col = charIndex % squareSize;
-
-		indices = new int[2];
-		indices[0] = row;
-		indices[1] = col;
+		// find the row and column values of the supplied character code and
+		// insert these values in to the return array
+		indices[0] = charIndex / squareSize;
+		indices[1] = charIndex % squareSize;
 
 		return indices;
 	}

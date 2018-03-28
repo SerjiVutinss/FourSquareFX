@@ -23,10 +23,10 @@ public class ThreadedDecrypter implements Runnable {
 
 		CharBlock cBlock;
 
-		char[] charBuf;
-		int length;
-
-		int count = 0;
+//		char[] charBuf;
+//		int length;
+//
+//		int count = 0;
 		boolean keepAlive = true;
 		try {
 			while (keepAlive) {
@@ -43,7 +43,7 @@ public class ThreadedDecrypter implements Runnable {
 							cBlock.getLength());
 					decrypt_queue.put(encBlock);
 					// System.out.println("Put decrypted: " + count);
-					count++;
+//					count++;
 				}
 			}
 			// add a poison pill to the decrypt queue

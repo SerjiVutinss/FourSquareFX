@@ -12,12 +12,12 @@ public class ThreadedWriter implements Runnable {
 
 	private BlockingQueue<CharBlock> output_queue;
 	private String output_filename;
-	private String type;
+//	private String type;
 
 	public ThreadedWriter(BlockingQueue<CharBlock> queue, String output_filename, String type) {
 		this.output_queue = queue;
 		this.output_filename = output_filename;
-		this.type = type;
+//		this.type = type;
 	}
 
 	@Override

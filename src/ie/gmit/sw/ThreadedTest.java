@@ -2,7 +2,6 @@ package ie.gmit.sw;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -31,7 +30,7 @@ public class ThreadedTest {
 
 	private static int queueCapacity = 10;
 
-	private static Charset UTF8 = Charset.forName("UTF-8");
+//	private static Charset UTF8 = Charset.forName("UTF-8");
 
 	static long keyOne = 1976565486;
 	static long keyTwo = 318326476;
@@ -67,7 +66,7 @@ public class ThreadedTest {
 		encrypted_read_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
 		decrypt_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
 
-		long startTime, endTime;
+		long startTime;
 		double duration, totalTime = 0;
 
 		passKeyOne = "hhhhhhhh";
@@ -151,9 +150,9 @@ public class ThreadedTest {
 	private static void testKeys(Cipher cipher2) {
 		StringBuilder sb = new StringBuilder();
 		
-		double startChar = 10;
+//		double startChar = 10;
 		double squareSize = 16;
-		double trimChars = 15;
+//		double trimChars = 15;
 		int totalChars = (int)(squareSize*squareSize);
 		
 //		for (int i = (int)startChar; i < ((int)squareSize * (int)trimChars); i++) {

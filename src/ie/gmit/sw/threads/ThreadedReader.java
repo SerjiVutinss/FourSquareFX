@@ -12,12 +12,12 @@ public class ThreadedReader implements Runnable {
 
 	private BlockingQueue<CharBlock> input_queue;
 	private String input_filename;
-	private String type;
+//	private String type;
 
 	public ThreadedReader(BlockingQueue<CharBlock> queue, String input_filename, String type) {
 		this.input_queue = queue;
 		this.input_filename = input_filename;
-		this.type = type;
+//		this.type = type;
 
 	}
 
