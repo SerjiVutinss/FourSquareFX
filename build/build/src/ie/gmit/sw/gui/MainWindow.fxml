@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ie.gmit.sw.gui.MainWindowController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane fx:id="ap" maxHeight="-1.0" maxWidth="-1.0" prefHeight="571.0" prefWidth="746.0" VBox.vgrow="ALWAYS">
+      <children>
+            <VBox prefHeight="131.0" prefWidth="280.0" style="-fx-border-color: lightgray;" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+               <children>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblPasscodeOne" prefHeight="25.0" prefWidth="128.0" text="Passcode #1:" />
+                        <TextField fx:id="tfPasscodeOne" prefHeight="26.0" prefWidth="200.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblPasscodeTwo" prefHeight="25.0" prefWidth="128.0" text="Passcode #2:" />
+                        <TextField fx:id="tfPasscodeTwo" prefHeight="26.0" prefWidth="200.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="35.0" prefWidth="268.0" text="Passcodes must be &gt;= 8 characters" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_RIGHT" prefHeight="62.0" prefWidth="268.0">
+                     <children>
+                        <Button fx:id="btnGenerateCipher" mnemonicParsing="false" onAction="#generateCipher" text="Generate Cipher" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <TextArea fx:id="taOutput" disable="true" layoutX="25.0" layoutY="183.0" prefHeight="374.0" prefWidth="707.0" />
+            <VBox layoutX="349.0" layoutY="25.0" prefHeight="111.0" prefWidth="387.0" style="-fx-border-color: lightgrey;" AnchorPane.leftAnchor="349.0" AnchorPane.topAnchor="25.0">
+               <children>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="16.0" prefWidth="411.0" text="Enter filenames or select files using the buttons">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets bottom="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="80.0" text="Input File:" />
+                        <TextField fx:id="tfInputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseInput" mnemonicParsing="false" onAction="#chooseInput" text="..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="81.0" text="Output File:" />
+                        <TextField fx:id="tfOutputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseOutput" mnemonicParsing="false" onAction="#chooseOutput" text="..." />
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="19.0" prefWidth="280.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="btnEncrypt" mnemonicParsing="false" onAction="#encryptInput" text="Encrypt Input" />
+                        <Button fx:id="btnDecrypt" mnemonicParsing="false" onAction="#decryptInput" text="Decrypt Input" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
