@@ -8,7 +8,7 @@ public abstract class CharMatrix {
 	// the first character code needed (newline character)
 	public static int startCharCode = 0;
 	// the dimension of the matrix
-	public static int squareSize = 16;
+	public static int squareSize = 20;
 	/* END public static variables */
 
 	// build the clear text array of integers which represent the characters

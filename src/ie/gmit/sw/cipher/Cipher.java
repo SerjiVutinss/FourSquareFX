@@ -1,6 +1,7 @@
 package ie.gmit.sw.cipher;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import ie.gmit.sw.FileHandler;
 
@@ -44,9 +45,9 @@ public final class Cipher {
 
 	public char[] encrypt(char charArray[], int length) {
 
-//		if (length % 2 != 0) {
-//			System.out.println("Encrypt: Received uneven Array!!!!!!");
-//		}
+		// if (length % 2 != 0) {
+		// System.out.println("Encrypt: Received uneven Array!!!!!!");
+		// }
 
 		char returnArray[] = new char[length];
 
@@ -68,7 +69,7 @@ public final class Cipher {
 		if (length % 2 != 0) {
 			System.out.println("Decrypt: Received uneven Array!!!!!!");
 		}
-		
+
 		char returnArray[] = new char[length];
 
 		int count = 0;
@@ -86,6 +87,23 @@ public final class Cipher {
 			count += 2;
 		}
 		return returnArray;
+	}
+
+	public boolean testKeys() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ");
+
+		char charsToEncrypt[] = sb.toString().toCharArray();
+		char encryptedString[] = this.encrypt(charsToEncrypt, charsToEncrypt.length);
+		char decryptedString[] = this.decrypt(encryptedString, encryptedString.length);
+
+		if (Arrays.equals(charsToEncrypt, decryptedString)) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	// for testing only

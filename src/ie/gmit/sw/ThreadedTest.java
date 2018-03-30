@@ -30,21 +30,19 @@ public class ThreadedTest {
 
 	private static int queueCapacity = 10;
 
-//	private static Charset UTF8 = Charset.forName("UTF-8");
-
 	static long keyOne = 1976565486;
 	static long keyTwo = 318326476;
 
 	static String passKeyOne, passKeyTwo;
 	static Cipher cipher;
 
-//	 static final String dir = System.getProperty("user.dir");
-	static final String dir = "R:/";
+	// static final String dir = System.getProperty("user.dir");
+	static final String dir = "/media/ramdisk";
 
 	static String resDir = dir + File.separatorChar + "resources" + File.separatorChar;
 
 	static String input_filename = resDir + "WarAndPeace-LeoTolstoy.txt";
-//	 static String input_filename = resDir + "sample_text.txt";
+	// static String input_filename = resDir + "sample_text.txt";
 
 	static String file_to_encrypt = resDir + input_filename;
 
@@ -69,8 +67,8 @@ public class ThreadedTest {
 		long startTime;
 		double duration, totalTime = 0;
 
-		passKeyOne = "hhhhhhhh";
-		passKeyTwo = "kkkkkkgk";
+		passKeyOne = "SAKJHS(HJ";
+		passKeyTwo = "876hHJG*^";
 
 		long keyOne = Math.abs(passKeyOne.hashCode());
 		long keyTwo = Math.abs(passKeyTwo.hashCode());
@@ -149,20 +147,22 @@ public class ThreadedTest {
 
 	private static void testKeys(Cipher cipher2) {
 		StringBuilder sb = new StringBuilder();
-		
-//		double startChar = 10;
+
+		// double startChar = 10;
 		double squareSize = 16;
-//		double trimChars = 15;
-		int totalChars = (int)(squareSize*squareSize);
-		
-//		for (int i = (int)startChar; i < ((int)squareSize * (int)trimChars); i++) {
-//			sb.append((char) i);
-//		}
-		
-//		for (int i = 0; i < (int)(squareSize*squareSize); i++) {
-//			sb.append((char) i);
-//		}
-		sb.append("!\\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäåæçå¹êëìíîïğñòóôõö÷øùúûüışÿ");
+		// double trimChars = 15;
+		int totalChars = (int) (squareSize * squareSize);
+
+		// for (int i = (int)startChar; i < ((int)squareSize * (int)trimChars); i++) {
+		// sb.append((char) i);
+		// }
+
+		// for (int i = 0; i < (int)(squareSize*squareSize); i++) {
+		// sb.append((char) i);
+		// }
+		// sb.append("!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+		sb.append(
+				" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~Â¡Â¢Â£Â¤Â¥Â¦Â§Â¨Â©ÂªÂ«Â¬Â­Â®Â¯Â°Â±Â²Â³Â´ÂµÂ¶Â·Â¸Â¹ÂºÂ»Â¼Â½Â¾Â¿Ã€ÃÃ‚ÃƒÃ„Ã…Ã†Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã—Ã˜Ã™ÃšÃ›ÃœÃÃÃŸÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã¦Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã±Ã²Ã³Ã´ÃµÃ¶Ã·Ã¸Ã¹ÃºÃ»Ã¼Ã½Ã¾Ã¿");
 
 		char charsToEncrypt[] = sb.toString().toCharArray();
 		char encryptedString[] = cipher.encrypt(charsToEncrypt, charsToEncrypt.length);
@@ -177,10 +177,11 @@ public class ThreadedTest {
 			System.out.println("Failed");
 		}
 
-		double accuracy = ((double)sb.length() / (squareSize * squareSize)*100);
-		
+		double accuracy = ((double) sb.length() / (squareSize * squareSize) * 100);
+
 		DecimalFormat df = new DecimalFormat("####0.00");
-		System.out.println("Accuracy: " + df.format(accuracy) + "% of " + totalChars + " characters");
+		System.out.println(
+				"Accuracy: " + df.format(accuracy) + "% (" + sb.length() + ") of " + totalChars + " characters");
 		// System.out.println(sb.toString());
 
 	}
