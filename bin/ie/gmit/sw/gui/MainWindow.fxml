@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ie.gmit.sw.gui.MainWindowController">
+<VBox prefHeight="600.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ie.gmit.sw.gui.MainWindowController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -54,7 +54,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane fx:id="ap" maxHeight="-1.0" maxWidth="-1.0" prefHeight="571.0" prefWidth="746.0" VBox.vgrow="ALWAYS">
+    <AnchorPane fx:id="ap" maxHeight="-1.0" maxWidth="-1.0" prefHeight="571.0" prefWidth="852.0" VBox.vgrow="ALWAYS">
       <children>
             <VBox prefHeight="131.0" prefWidth="280.0" style="-fx-border-color: lightgray;" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
                <children>
@@ -77,6 +77,10 @@
                   </HBox>
                   <HBox alignment="TOP_RIGHT" prefHeight="62.0" prefWidth="268.0">
                      <children>
+                        <Button fx:id="btnTestKeys" mnemonicParsing="false" onAction="#testKeys" text="Test Keys">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin></Button>
                         <Button fx:id="btnGenerateCipher" mnemonicParsing="false" onAction="#generateCipher" text="Generate Cipher" />
                      </children>
                      <VBox.margin>
@@ -88,8 +92,8 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <TextArea fx:id="taOutput" disable="true" layoutX="25.0" layoutY="183.0" prefHeight="374.0" prefWidth="707.0" />
-            <VBox layoutX="349.0" layoutY="25.0" prefHeight="111.0" prefWidth="387.0" style="-fx-border-color: lightgrey;" AnchorPane.leftAnchor="349.0" AnchorPane.topAnchor="25.0">
+            <TextArea fx:id="taOutput" disable="true" layoutX="25.0" layoutY="183.0" prefHeight="374.0" prefWidth="852.0" />
+            <VBox layoutX="349.0" layoutY="25.0" prefHeight="131.0" prefWidth="527.0" style="-fx-border-color: lightgrey;" AnchorPane.leftAnchor="349.0" AnchorPane.topAnchor="25.0">
                <children>
                   <HBox prefHeight="25.0" prefWidth="200.0">
                      <children>

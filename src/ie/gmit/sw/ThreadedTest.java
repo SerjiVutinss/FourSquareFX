@@ -65,7 +65,7 @@ public class ThreadedTest {
 		decrypt_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
 
 		long startTime;
-		double duration, totalTime = 0;
+		double duration;//, totalTime = 0;
 
 		passKeyOne = "SAKJHS(HJ";
 		passKeyTwo = "876hHJG*^";
@@ -114,7 +114,7 @@ public class ThreadedTest {
 		if (encrypt_service.isTerminated()) {
 			duration = (System.nanoTime() - (double) startTime) / 1000000000;
 			System.out.println("Total encryption time was: " + duration + "s");
-			totalTime += duration;
+			Runner.totalTime += duration;
 			duration = 0;
 			startTime = System.nanoTime();
 		}
@@ -137,11 +137,11 @@ public class ThreadedTest {
 		if (decrypt_service.isTerminated()) {
 			duration = (System.nanoTime() - (double) startTime) / 1000000000;
 			System.out.println("Total decryption time was: " + duration + "s");
-			totalTime += duration;
+			Runner.totalTime += duration;
 			duration = 0;
 			startTime = System.nanoTime();
 		}
-		System.out.println("Total time was: " + totalTime + "s");
+		//System.out.println("Total time was: " + totalTime + "s");
 
 	}
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import ie.gmit.sw.FileHandler;
 import ie.gmit.sw.cipher.Cipher;
 import ie.gmit.sw.cipher.KeyGenerator;
+import ie.gmit.sw.threads.ThreadController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -36,7 +37,7 @@ public class MainWindowController {
 	private TextArea taOutput;
 
 	@FXML
-	private Button btnGenerateCipher, btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt;
+	private Button btnGenerateCipher, btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt, btnTestKeys;
 	// end FXML nodes
 
 	// the Cipher object which will be generated using the passcodes
@@ -48,6 +49,7 @@ public class MainWindowController {
 
 	// these will be used to time certain operations
 	double startTime, endTime, duration;
+	boolean enableEncryption = false;
 
 	// no constructor used, using initialize() instead so that all nodes are
 	// instantiated
@@ -92,6 +94,46 @@ public class MainWindowController {
 				updateUI();
 			}
 		});
+
+		tfPasscodeOne.setText("hello");
+		tfPasscodeTwo.setText("world");
+
+		tfInputFile.setText("/media/ramdisk/resources/WarAndPeace-LeoTolstoy.txt");
+		tfOutputFile.setText("/media/ramdisk/resources/encrypted.txt");
+	}
+
+	// check that keys are valid - generate and set a cipher if so
+	@FXML
+	protected void testKeys(ActionEvent ev) {
+
+		long keyOne, keyTwo;
+		boolean enableEncrypt = false;
+
+		// get keys from keygen
+		// keyOne = KeyGenerator.passcodeToKey(tfPasscodeOne.getText());
+		// keyTwo = KeyGenerator.passcodeToKey(tfPasscodeTwo.getText());
+
+		keyOne = tfPasscodeOne.getText().hashCode();
+		keyTwo = tfPasscodeTwo.getText().hashCode();
+
+		// long keyOne = 23;
+		// long keyTwo = 24;
+		try {
+			cipher = new Cipher(keyOne, keyTwo, false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		enableEncryption = cipher.testKeys();
+		if (enableEncryption) {
+			taOutput.appendText("\nKeys Accepted");
+			taOutput.appendText("\nCipher Created");
+			btnGenerateCipher.setDisable(!enableEncryption);
+
+		} else {
+			taOutput.appendText("\nKeys Rejected, please try another pair");
+		}
+
+		updateUI();
 	}
 
 	// check that keys are valid - generate and set a cipher if so
@@ -101,8 +143,10 @@ public class MainWindowController {
 		long keyOne, keyTwo;
 
 		// get keys from keygen
-		keyOne = KeyGenerator.passcodeToKey(tfPasscodeOne.getText());
-		keyTwo = KeyGenerator.passcodeToKey(tfPasscodeTwo.getText());
+		// keyOne = KeyGenerator.passcodeToKey(tfPasscodeOne.getText());
+		// keyTwo = KeyGenerator.passcodeToKey(tfPasscodeTwo.getText());
+		keyOne = tfPasscodeOne.getText().hashCode();
+		keyTwo = tfPasscodeTwo.getText().hashCode();
 
 		// check that keys are valid and generate/set cipher
 		if (KeyGenerator.keyIsValid(keyOne) && KeyGenerator.keyIsValid(keyTwo)) {
@@ -173,57 +217,16 @@ public class MainWindowController {
 	@FXML
 	protected void encryptInput() {
 
-		StringBuilder sb_to_encrypt;
-
-		if (checkFiles()) {
-			try {
-				sb_to_encrypt = FileHandler.readFile(input_file, true);
-				taOutput.appendText("\nEncrypting...");
-				startTime = System.nanoTime();
-//				StringBuilder sb = this.cipher.encrypt(sb_to_encrypt);
-				endTime = System.nanoTime();
-				duration = (endTime - startTime) / 1000000000;
-				taOutput.appendText("\nEncrypted in " + duration + " seconds");
-				taOutput.appendText("\nWriting to file...");
-//				FileHandler.outputToFile(sb, output_file);
-				taOutput.appendText("\nOutput file written");
-
-				resetFiles();
-
-			} catch (IOException e) {
-				handleError("Input file cannot be read");
-			}
-		}
+		ThreadController tc = new ThreadController(this.cipher);
+		taOutput.appendText("\n" + tc.encrypt(tfInputFile.getText(), tfOutputFile.getText()));
 	}
 
 	// could probably tidy these methods up to reduce code repetition and better
 	// exception handling
 	@FXML
 	protected void decryptInput() {
-		StringBuilder sb_to_decrypt;
-		if (checkFiles()) {
-			try {
-				// read the input file
-				sb_to_decrypt = FileHandler.readFile(input_file, false);
-
-				// DECRYPTION
-				taOutput.appendText("\nDecrypting...");
-				// start a timer
-				startTime = System.nanoTime();
-//				StringBuilder sb = this.cipher.decrypt(sb_to_decrypt);
-				endTime = System.nanoTime();
-				duration = (endTime - startTime) / 1000000000;
-				taOutput.appendText("\nDecrypted in " + duration + " seconds");
-				taOutput.appendText("\nWriting to file...");
-//				FileHandler.outputToFile(sb, output_file);
-				taOutput.appendText("\nOutput file written");
-
-				resetFiles();
-
-			} catch (IOException e) {
-				handleError("Input file cannot be read");
-			}
-		}
+		ThreadController tc = new ThreadController(cipher);
+		taOutput.appendText("\n" + tc.decrypt(tfInputFile.getText(), tfOutputFile.getText()));
 	}
 
 	// check that either the files have been set, or the files exist at the given
@@ -281,16 +284,14 @@ public class MainWindowController {
 		// disable encryption if the cipher has not been set
 		// OR if the input_file AND input_file path have not been set
 		// OR if the output_file AND output_file path have not been set
-		boolean disableEncryption = ((cipher == null)
-				|| ((output_file == null) && (tfOutputFile.getText().length() == 0))
-				|| ((input_file == null) && (tfInputFile.getText().length() == 0)));
+		boolean disableEncryption = ((cipher == null) || ((output_file == null) && (!enableEncryption))
+				|| ((input_file == null) && (!enableEncryption)));
 		btnEncrypt.setDisable(disableEncryption);
 		btnDecrypt.setDisable(disableEncryption);
 
-		boolean enableCipherCreate = (tfPasscodeOne.getText().length() >= 8
-				&& tfPasscodeTwo.getText().length() >= 8);
+//		boolean enableCipherCreate = (tfPasscodeOne.getText().length() >= 8 && tfPasscodeTwo.getText().length() >= 8);
 
-		btnGenerateCipher.setDisable(!enableCipherCreate);
+//		btnGenerateCipher.setDisable(!enableCipherCreate);
 	}
 
 	// called after encrypting or decrypting - resets the files and file paths

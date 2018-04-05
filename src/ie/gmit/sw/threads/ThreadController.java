@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import ie.gmit.sw.Runner;
 import ie.gmit.sw.cipher.Cipher;
 
 public class ThreadController {
@@ -43,7 +44,7 @@ public class ThreadController {
 		this.cipher = cipher;
 	}
 
-	public void encrypt(String input_filename, String output_filename) {
+	public String encrypt(String input_filename, String output_filename) {
 
 		source_read_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
 		encrypt_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
@@ -74,16 +75,16 @@ public class ThreadController {
 		while (true) {
 			if (encrypt_service.isTerminated()) {
 				duration = (System.nanoTime() - (double) startTime) / 1000000000;
-				System.out.println("Total encryption time was: " + duration + "s");
-				totalTime += duration;
+				String  msg = ("Total encryption time was: " + duration + "s");
+				Runner.totalTime += duration;
 				duration = 0;
 				startTime = System.nanoTime();
-				return;
+				return msg;
 			}
 		}
 	}
 
-	public void decrypt(String input_filename, String output_filename) {
+	public String decrypt(String input_filename, String output_filename) {
 
 		encrypted_read_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
 		decrypt_queue = new ArrayBlockingQueue<CharBlock>(queueCapacity);
@@ -111,11 +112,11 @@ public class ThreadController {
 		while (true) {
 			if (decrypt_service.isTerminated()) {
 				duration = (System.nanoTime() - (double) startTime) / 1000000000;
-				System.out.println("Total decryption time was: " + duration + "s");
-				totalTime += duration;
+				String  msg = ("Total decryption time was: " + duration + "s");
+				Runner.totalTime += duration;
 				duration = 0;
 				startTime = System.nanoTime();
-				return;
+				return msg;
 			}
 		}
 	}
