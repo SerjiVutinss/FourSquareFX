@@ -3,7 +3,6 @@ package ie.gmit.sw.gui;
 import java.io.File;
 import java.io.IOException;
 
-import ie.gmit.sw.FileHandler;
 import ie.gmit.sw.cipher.Cipher;
 import ie.gmit.sw.cipher.KeyGenerator;
 import ie.gmit.sw.threads.ThreadController;
@@ -32,19 +31,23 @@ public class MainWindowController {
 	@FXML
 	private Label lblPasscodeOne, lblPasscodeTwo;
 	@FXML
-	private TextField tfPasscodeOne, tfPasscodeTwo, tfInputFile, tfOutputFile;
+	private TextField tfPasscodeOne, tfPasscodeTwo, tfEncryptInputFile, tfEncryptOutputFile, tfDecryptInputFile,
+			tfDecryptOutputFile;
 	@FXML
 	private TextArea taOutput;
 
 	@FXML
-	private Button btnGenerateCipher, btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt, btnTestKeys;
+	private Button btnGenerateCipher, btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt, btnTestKeys, btnClearOutput;
+
+	@FXML
+	private Label lblCipherSet;
 	// end FXML nodes
 
 	// the Cipher object which will be generated using the passcodes
 	Cipher cipher = null;
 
 	// objects to hold the input and output files or file paths
-	File input_file, output_file;
+	File input_file_encrypt, output_file_encrypt, input_file_decrypt, output_file_decrypt;
 	String default_input_filename, default_output_filename;
 
 	// these will be used to time certain operations
@@ -57,23 +60,41 @@ public class MainWindowController {
 	// add got focus and lost focus listeners to the file text fields
 	@FXML
 	private void initialize() {
-		updateUI();
+		updateUI(-1);
 
 		// input file text field on/lost focus
-		tfInputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		tfEncryptInputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
-				updateUI();
+				updateUI(0);
 			}
 		});
 
 		// output file text field on/lost focus
-		tfOutputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
+		tfEncryptOutputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
-				updateUI();
+				updateUI(0);
+			}
+		});
+
+		// input file text field on/lost focus
+		tfDecryptInputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+				updateUI(1);
+			}
+		});
+
+		// output file text field on/lost focus
+		tfDecryptOutputFile.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+				updateUI(1);
 			}
 		});
 
@@ -82,7 +103,7 @@ public class MainWindowController {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
-				updateUI();
+				updateUI(-1);
 			}
 		});
 
@@ -91,15 +112,52 @@ public class MainWindowController {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
-				updateUI();
+				updateUI(-1);
 			}
 		});
 
 		tfPasscodeOne.setText("hello");
 		tfPasscodeTwo.setText("world");
 
-		tfInputFile.setText("/media/ramdisk/resources/WarAndPeace-LeoTolstoy.txt");
-		tfOutputFile.setText("/media/ramdisk/resources/encrypted.txt");
+		String dir = System.getProperty("user.dir");
+		String resDir = dir + File.separatorChar + "resources" + File.separatorChar;
+
+		tfEncryptInputFile.setText(resDir + "WarAndPeace-LeoTolstoy.txt");
+		tfEncryptOutputFile.setText(resDir + "encrypted.txt");
+		tfDecryptInputFile.setText(resDir + "encrypted.txt");
+		tfDecryptOutputFile.setText(resDir + "decrypted.txt");
+		btnEncrypt.setDisable(true);
+		btnDecrypt.setDisable(true);
+	}
+
+	private void validateFiles(TextField input, TextField output, TextArea outputArea, Button btn, String type) {
+		btn.setDisable(true);
+		// if fields are not empty
+		if (input.getText().length() > 0 && output.getText().length() > 0) {
+			File inputF = new File(input.getText());
+			File outputF = new File(output.getText());
+			if (!inputF.isFile()) {
+				outputArea.appendText("\nInput file for " + type + "ion does not exist, cannot " + type);
+				btn.setDisable(true);
+			} else if (!outputF.isFile()) {
+				outputArea.appendText("\nOutput file for " + type + "ion does not exist, trying to create");
+				try {
+					if (outputF.createNewFile()) {
+						outputArea.appendText("\n...Output file for " + type + "ion created");
+						btn.setDisable(false);
+					}
+				} catch (IOException e) {
+					outputArea.appendText("\nError: Output file for " + type + "ion could not be created");
+					btn.setDisable(true);
+				}
+
+			} else {
+				btn.setDisable(false);
+			}
+		} else {
+			outputArea.appendText("\nOne or more filenames are empty for " + type + "ion");
+			btn.setDisable(true);
+		}
 	}
 
 	// check that keys are valid - generate and set a cipher if so
@@ -107,19 +165,18 @@ public class MainWindowController {
 	protected void testKeys(ActionEvent ev) {
 
 		long keyOne, keyTwo;
-		boolean enableEncrypt = false;
-
-		// get keys from keygen
-		// keyOne = KeyGenerator.passcodeToKey(tfPasscodeOne.getText());
-		// keyTwo = KeyGenerator.passcodeToKey(tfPasscodeTwo.getText());
+		//boolean enableEncrypt = false;
 
 		keyOne = tfPasscodeOne.getText().hashCode();
 		keyTwo = tfPasscodeTwo.getText().hashCode();
 
+		System.out.println(keyOne);
+		System.out.println(keyTwo);
+
 		// long keyOne = 23;
 		// long keyTwo = 24;
 		try {
-			cipher = new Cipher(keyOne, keyTwo, false);
+			cipher = new Cipher(keyOne, keyTwo, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -128,12 +185,15 @@ public class MainWindowController {
 			taOutput.appendText("\nKeys Accepted");
 			taOutput.appendText("\nCipher Created");
 			btnGenerateCipher.setDisable(!enableEncryption);
+			lblCipherSet.setText("TRUE");
 
 		} else {
 			taOutput.appendText("\nKeys Rejected, please try another pair");
+			lblCipherSet.setText("FALSE");
+			cipher = null;
 		}
 
-		updateUI();
+		updateUI(2);
 	}
 
 	// check that keys are valid - generate and set a cipher if so
@@ -142,9 +202,7 @@ public class MainWindowController {
 
 		long keyOne, keyTwo;
 
-		// get keys from keygen
-		// keyOne = KeyGenerator.passcodeToKey(tfPasscodeOne.getText());
-		// keyTwo = KeyGenerator.passcodeToKey(tfPasscodeTwo.getText());
+		// get keys
 		keyOne = tfPasscodeOne.getText().hashCode();
 		keyTwo = tfPasscodeTwo.getText().hashCode();
 
@@ -170,25 +228,19 @@ public class MainWindowController {
 			taOutput.appendText("\nInvalid Passcodes, try again");
 		}
 
-		updateUI();
+		updateUI(-1);
 	}
 
 	// could probably tidy these methods up to reduce code repetition
-
 	// select an input file using the file chooser
 	@FXML
-	protected void chooseInput(ActionEvent event) {
-		// taOutput.appendText("\nChoose file....");
-		// select a file, set the File chooser title to the supplied parameter
-		input_file = fileChooser("Select input file");
+	protected void chooseEncryptInput(ActionEvent event) {
+		input_file_encrypt = fileChooser("Select input file for encryption");
 
-		if (input_file != null) {
+		if (input_file_encrypt != null) {
 
-			tfInputFile.setText(input_file.getAbsolutePath());
-
-			// taOutput.appendText("\n" + input_file.getAbsolutePath());
-			// taOutput.appendText("\n" + input_file.getName());
-			updateUI();
+			tfEncryptInputFile.setText(input_file_encrypt.getAbsolutePath());
+			updateUI(0);
 		} else {
 			taOutput.appendText("\nFile select cancelled!");
 		}
@@ -196,16 +248,35 @@ public class MainWindowController {
 
 	// select an output file using the file chooser
 	@FXML
-	protected void chooseOutput(ActionEvent event) {
-		// taOutput.appendText("\nChoose file....");
-		output_file = fileChooser("Select output file");
+	protected void chooseEncryptOutput(ActionEvent event) {
+		output_file_encrypt = fileChooser("Select output file for encryption");
 
-		if (output_file != null) {
-			tfOutputFile.setText(output_file.getAbsolutePath());
-			//
-			// taOutput.appendText("\n" + output_file.getAbsolutePath());
-			// taOutput.appendText("\n" + output_file.getName());
-			updateUI();
+		if (output_file_encrypt != null) {
+			tfEncryptOutputFile.setText(output_file_encrypt.getAbsolutePath());
+			updateUI(0);
+		} else {
+			taOutput.appendText("\nFile select cancelled!");
+		}
+	}
+
+	@FXML
+	protected void chooseDecryptInput(ActionEvent event) {
+		input_file_decrypt = fileChooser("Select input file for decryption");
+		if (input_file_decrypt != null) {
+			tfDecryptInputFile.setText(input_file_decrypt.getAbsolutePath());
+			updateUI(1);
+		} else {
+			taOutput.appendText("\nFile select cancelled!");
+		}
+	}
+
+	// select an output file using the file chooser
+	@FXML
+	protected void chooseDecryptOutput(ActionEvent event) {
+		output_file_decrypt = fileChooser("Select output file for decryption");
+		if (output_file_decrypt != null) {
+			tfDecryptOutputFile.setText(output_file_decrypt.getAbsolutePath());
+			updateUI(1);
 		} else {
 			taOutput.appendText("\nFile select cancelled!");
 		}
@@ -218,7 +289,7 @@ public class MainWindowController {
 	protected void encryptInput() {
 
 		ThreadController tc = new ThreadController(this.cipher);
-		taOutput.appendText("\n" + tc.encrypt(tfInputFile.getText(), tfOutputFile.getText()));
+		taOutput.appendText("\n" + tc.encrypt(tfEncryptInputFile.getText(), tfEncryptOutputFile.getText()));
 	}
 
 	// could probably tidy these methods up to reduce code repetition and better
@@ -226,48 +297,7 @@ public class MainWindowController {
 	@FXML
 	protected void decryptInput() {
 		ThreadController tc = new ThreadController(cipher);
-		taOutput.appendText("\n" + tc.decrypt(tfInputFile.getText(), tfOutputFile.getText()));
-	}
-
-	// check that either the files have been set, or the files exist at the given
-	// paths
-	private boolean checkFiles() {
-		if (input_file == null) {
-			try {
-				input_file = new File(tfInputFile.getText());
-				if (!input_file.exists()) {
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				taOutput.appendText("\nInput file not found");
-				return false;
-			}
-		} else if (output_file == null) {
-			try {
-				output_file = new File(tfOutputFile.getText());
-				if (!output_file.exists()) {
-
-					throw new Exception();
-				}
-			} catch (Exception e) {
-				taOutput.appendText("\nOutput file not found");
-				return false;
-			}
-		}
-		return true;
-	}
-
-	// write to the output file
-	@FXML
-	protected void writeToFile(ActionEvent evt) {
-
-		StringBuilder sb = new StringBuilder();
-
-		try {
-			FileHandler.outputToFile(sb, output_file);
-		} catch (IOException e) {
-			handleError("\nError: Output file cannot be written to");
-		}
+		taOutput.appendText("\n" + tc.decrypt(tfDecryptInputFile.getText(), tfDecryptOutputFile.getText()));
 	}
 
 	// open a file chooser dialog - called from FXML button methods
@@ -278,34 +308,40 @@ public class MainWindowController {
 		return fileChooser.showOpenDialog(null);
 	}
 
-	// refresh the UI, in particular enable or disable the Encrypt/Decrypt buttons
-	private void updateUI() {
-
-		// disable encryption if the cipher has not been set
-		// OR if the input_file AND input_file path have not been set
-		// OR if the output_file AND output_file path have not been set
-		boolean disableEncryption = ((cipher == null) || ((output_file == null) && (!enableEncryption))
-				|| ((input_file == null) && (!enableEncryption)));
-		btnEncrypt.setDisable(disableEncryption);
-		btnDecrypt.setDisable(disableEncryption);
-
-//		boolean enableCipherCreate = (tfPasscodeOne.getText().length() >= 8 && tfPasscodeTwo.getText().length() >= 8);
-
-//		btnGenerateCipher.setDisable(!enableCipherCreate);
+	// refresh the UI, in particular enable or disable the Encrypt/Decrypt buttons,
+	// 0 for encryption, 1 for decryption, 2 for both
+	private void updateUI(int type) {
+		if (type != -1) {
+			if (cipher != null) {
+				if (type == 0) {
+					validateFiles(tfEncryptInputFile, tfEncryptOutputFile, taOutput, btnEncrypt, "encrypt");
+				} else if (type == 1) {
+					validateFiles(tfDecryptInputFile, tfDecryptOutputFile, taOutput, btnDecrypt, "decrypt");
+				} else {
+					validateFiles(tfEncryptInputFile, tfEncryptOutputFile, taOutput, btnEncrypt, "encrypt");
+					validateFiles(tfDecryptInputFile, tfDecryptOutputFile, taOutput, btnDecrypt, "decrypt");
+				}
+			}
+		}
+	}
+	
+	@FXML
+	protected void clearOutput() {
+		taOutput.clear();
 	}
 
-	// called after encrypting or decrypting - resets the files and file paths
-	private void resetFiles() {
-
-		input_file = null;
-		output_file = null;
-		tfInputFile.setText("");
-		tfOutputFile.setText("");
-		updateUI();
-	}
+	// // called after encrypting or decrypting - resets the files and file paths
+	// private void resetFiles() {
+	//
+	// input_file_encrypt = null;
+	// output_file_encrypt = null;
+	// tfEncryptInputFile.setText("");
+	// tfEncryptOutputFile.setText("");
+	// updateUI(-1);
+	// }
 
 	// simple error handler to append text to the text area
-	private void handleError(String error) {
+	public void handleError(String error) {
 		taOutput.appendText("\n!!!Error: " + error + "!!!");
 	}
 }

@@ -38,8 +38,8 @@ public class ThreadedTest {
 
 	// static final String dir = System.getProperty("user.dir");
 	static final String dir = "/media/ramdisk";
-
 	static String resDir = dir + File.separatorChar + "resources" + File.separatorChar;
+
 
 	static String input_filename = resDir + "WarAndPeace-LeoTolstoy.txt";
 	// static String input_filename = resDir + "sample_text.txt";

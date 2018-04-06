@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="911.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ie.gmit.sw.gui.MainWindowController">
+<VBox prefHeight="600.0" prefWidth="1074.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ie.gmit.sw.gui.MainWindowController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -56,7 +56,7 @@
     </MenuBar>
     <AnchorPane fx:id="ap" maxHeight="-1.0" maxWidth="-1.0" prefHeight="571.0" prefWidth="852.0" VBox.vgrow="ALWAYS">
       <children>
-            <VBox prefHeight="131.0" prefWidth="280.0" style="-fx-border-color: lightgray;" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <VBox layoutX="14.0" layoutY="25.0" prefHeight="131.0" prefWidth="438.0" style="-fx-border-color: lightgray;" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="25.0">
                <children>
                   <HBox prefHeight="25.0" prefWidth="200.0">
                      <children>
@@ -77,6 +77,12 @@
                   </HBox>
                   <HBox alignment="TOP_RIGHT" prefHeight="62.0" prefWidth="268.0">
                      <children>
+                        <Label prefHeight="26.0" prefWidth="77.0" text="Cipher set:" />
+                        <Label fx:id="lblCipherSet" prefHeight="26.0" prefWidth="54.0" text="FALSE">
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Label>
                         <Button fx:id="btnTestKeys" mnemonicParsing="false" onAction="#testKeys" text="Test Keys">
                            <HBox.margin>
                               <Insets right="5.0" />
@@ -92,8 +98,8 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <TextArea fx:id="taOutput" disable="true" layoutX="25.0" layoutY="183.0" prefHeight="374.0" prefWidth="852.0" />
-            <VBox layoutX="349.0" layoutY="25.0" prefHeight="131.0" prefWidth="527.0" style="-fx-border-color: lightgrey;" AnchorPane.leftAnchor="349.0" AnchorPane.topAnchor="25.0">
+            <TextArea fx:id="taOutput" disable="true" layoutX="25.0" layoutY="183.0" prefHeight="374.0" prefWidth="411.0" />
+            <VBox layoutX="500.0" layoutY="25.0" prefHeight="131.0" prefWidth="560.0" style="-fx-border-color: lightgrey;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
                <children>
                   <HBox prefHeight="25.0" prefWidth="200.0">
                      <children>
@@ -110,21 +116,20 @@
                   <HBox prefHeight="25.0" prefWidth="200.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="80.0" text="Input File:" />
-                        <TextField fx:id="tfInputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnChooseInput" mnemonicParsing="false" onAction="#chooseInput" text="..." />
+                        <TextField fx:id="tfEncryptInputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseEncryptInput" mnemonicParsing="false" onAction="#chooseEncryptInput" text="..." />
                      </children>
                   </HBox>
                   <HBox prefHeight="25.0" prefWidth="200.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="81.0" text="Output File:" />
-                        <TextField fx:id="tfOutputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnChooseOutput" mnemonicParsing="false" onAction="#chooseOutput" text="..." />
+                        <TextField fx:id="tfEncryptOutputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseEncryptOutput" mnemonicParsing="false" onAction="#chooseEncryptOutput" text="..." />
                      </children>
                   </HBox>
-                  <HBox alignment="TOP_CENTER" prefHeight="19.0" prefWidth="280.0" spacing="20.0">
+                  <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="280.0" spacing="20.0">
                      <children>
-                        <Button fx:id="btnEncrypt" mnemonicParsing="false" onAction="#encryptInput" text="Encrypt Input" />
-                        <Button fx:id="btnDecrypt" mnemonicParsing="false" onAction="#decryptInput" text="Decrypt Input" />
+                        <Button fx:id="btnEncrypt" mnemonicParsing="false" onAction="#encryptInput" text="Encrypt" />
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -135,6 +140,50 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
+            <VBox layoutX="500.0" layoutY="183.0" prefHeight="131.0" prefWidth="560.0" style="-fx-border-color: lightgrey;">
+               <children>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="16.0" prefWidth="411.0" text="Enter filenames or select files using the buttons">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets bottom="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="80.0" text="Input File:" />
+                        <TextField fx:id="tfDecryptInputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseDecryptInput" mnemonicParsing="false" onAction="#chooseDecryptInput" text="..." />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="25.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="81.0" text="Output File:" />
+                        <TextField fx:id="tfDecryptOutputFile" prefHeight="26.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnChooseDecryptOutput" mnemonicParsing="false" onAction="#chooseDecryptOutput" text="..." />
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_RIGHT" prefHeight="19.0" prefWidth="280.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="btnDecrypt" mnemonicParsing="false" onAction="#decryptInput" text="Decrypt" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <Label layoutX="481.0" layoutY="6.0" text="ENCRYPTION" />
+            <Label layoutX="481.0" layoutY="167.0" text="DECRYPTION" />
+            <Button fx:id="btnClearOutput" layoutX="452.0" layoutY="524.0" mnemonicParsing="false" onAction="#clearOutput" text="Clear" />
       </children>
     </AnchorPane>
   </children>
