@@ -1,13 +1,17 @@
 package ie.gmit.sw.threads;
 
 /* 
- * this class is used to place charArrays on the 
- * Blocking queues with their known lengths 
+ * A simple class which is used to place charArrays on the 
+ * Blocking queues with actual number of characters
+ * 
+ * Since each block is of the same size, 
+ *  
+ *  BiGram.bigramCharArray() static method
  */
 public class CharBlock {
 
-	private char[] chars;
-	private int length;
+	private char[] chars; // the charArray
+	private int length; // the length of the charArray
 
 	public CharBlock(char[] chars, int length) {
 		this.chars = chars;

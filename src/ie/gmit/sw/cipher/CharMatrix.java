@@ -4,12 +4,12 @@ import java.util.Random;
 
 public abstract class CharMatrix {
 
-	/* START public static variables - Cipher class needs access to these */
-	// the first character code needed (newline character)
+	/* public static variables - Cipher class needs access to these */
+	// the first character code needed - defaulting to 0
 	public static int startCharCode = 0;
-	// the dimension of the matrix
+	// the dimension of the matrix - testing shows 16 is the smallest square which
+	// can fit the most common characters
 	public static int squareSize = 16;
-	/* END public static variables */
 
 	// build the clear text array of integers which represent the characters
 	public static int[][] buildCharCodeMatrix() {
@@ -31,30 +31,28 @@ public abstract class CharMatrix {
 
 	// repeatable shuffle based on the supplied long number
 
-	/* The following code is adapted from Collections.shuffle */
-	// Shuffle a 2D integer array
+	/* The following code is adapted from Collections.shuffle() */
+	// Shuffle a 2D integer array - shuffles row contents and column contents
 	public static int[][] shuffle(int[][] matrix, long key) {
+
+		Random rand = new Random(key); // create a Random using the supplied key
 		
-		Random rand = new Random(key);
+		// reverse nested loop - O(n^2), where n is the square size
 		for (int i = matrix.length - 1; i > 0; i--) {
 			for (int j = matrix[i].length - 1; j > 0; j--) {
+				// get 2 random integers
 				int m = rand.nextInt(i + 1);
 				int n = rand.nextInt(j + 1);
 
+				// swap matrix elements
 				int temp = matrix[i][j];
 				matrix[i][j] = matrix[m][n];
 				matrix[m][n] = temp;
 			}
 		}
-		return matrix;
+		return matrix; // return the shuffled matrix
 	}
 
-//	// Swap two entries in a 2D array
-//	private static void swap(int[][] matrix, int columns, int i, int j) {
-//		int tmp = matrix[i / columns][i % columns];
-//		matrix[i / columns][i % columns] = matrix[j / columns][j % columns];
-//		matrix[j / columns][j % columns] = tmp;
-//	}
 
 	// returns an integer array with two elements - find the location of a
 	// character code within the clear text matrix
@@ -73,7 +71,7 @@ public abstract class CharMatrix {
 		return indices;
 	}
 
-	// method used to index the cipher array - each Tuple containing the row and
+	// method used to index the cipher array - each int[] containing the row and
 	// column positions of the char in the cipher array will be placed at the
 	// correct index (charCode - startCode) in the array
 	// This method only runs once for each cipher matrix after they have been
@@ -88,16 +86,16 @@ public abstract class CharMatrix {
 		// loop through the cipher array and place each Tuple containing the char
 		// position in the cipher array at the correct index (charCode - startCode) in
 		// the returned (indexedList) array -
-		// RUNNING TIME O(n) or O(squareSize)
+		
+		// RUNNING TIME O(n^2) or O(squareSize*squareSize)
 		for (int row = 0; row < squareSize; row++) {
 			for (int col = 0; col < squareSize; col++) {
 				// assign the variable using the current row and col values
 				charPos = new int[2];
 				charPos[0] = row;
 				charPos[1] = col;
-				// and place the Tuple into the return array at the correct index
+				// and place the int[] into the return array at the correct index
 				indexedList[arr[row][col]] = charPos;
-				// indexedList.set(arr[row][col] - startCharCode, charPos);
 			}
 		}
 		return indexedList;

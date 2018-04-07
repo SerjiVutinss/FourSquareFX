@@ -2,15 +2,18 @@ package ie.gmit.sw.threads;
 
 import java.util.concurrent.BlockingQueue;
 
-import ie.gmit.sw.ThreadedTest;
 import ie.gmit.sw.cipher.Cipher;
 
 public class ThreadedDecrypter implements Runnable {
 
+	// read encrypted text from this queue
 	private BlockingQueue<CharBlock> read_queue;
+	// place decrypted text on this queue
 	private BlockingQueue<CharBlock> decrypt_queue;
+	// the cipher object to be used for decryption
 	private Cipher cipher;
 
+	// queues from ThreadController, Cipher from MainWindowController
 	public ThreadedDecrypter(BlockingQueue<CharBlock> read_queue, BlockingQueue<CharBlock> decrypt_queue,
 			Cipher cipher) {
 		this.read_queue = read_queue;
@@ -33,7 +36,7 @@ public class ThreadedDecrypter implements Runnable {
 				// read from the read_queue
 				cBlock = read_queue.take();
 				if (cBlock.getLength() == 3) {
-					if (ThreadedTest.compareToPoison(cBlock.getChars())) {
+					if (ThreadController.compareToPoison(cBlock.getChars())) {
 						// System.out.println("FOUND POISON PILL - decrypter");
 						keepAlive = false;
 					}
@@ -47,10 +50,10 @@ public class ThreadedDecrypter implements Runnable {
 				}
 			}
 			// add a poison pill to the decrypt queue
-			this.decrypt_queue.put(ThreadedTest.PILL_BLOCK);
+			this.decrypt_queue.put(ThreadController.PILL_BLOCK);
 			// System.out.println("PUT POISON PILL - DECRYPTER");
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			// TODO: how to handle thread exception correctly
 			e.printStackTrace();
 		}
 	}

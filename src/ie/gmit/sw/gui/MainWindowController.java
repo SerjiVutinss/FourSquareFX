@@ -173,13 +173,7 @@ public class MainWindowController {
 		System.out.println(keyOne);
 		System.out.println(keyTwo);
 
-		// long keyOne = 23;
-		// long keyTwo = 24;
-		try {
-			cipher = new Cipher(keyOne, keyTwo, true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		cipher = new Cipher(keyOne, keyTwo, true);
 		enableEncryption = cipher.testKeys();
 		if (enableEncryption) {
 			taOutput.appendText("\nKeys Accepted");
@@ -211,18 +205,12 @@ public class MainWindowController {
 			taOutput.appendText("\nPassscodes accepted");
 			taOutput.appendText("\nPassscode 1: " + keyOne);
 			taOutput.appendText("\nPassscode 2: " + keyTwo);
-			try {
-				startTime = System.nanoTime();
-				taOutput.appendText("\nBuilding Cipher...");
-				cipher = new Cipher(keyOne, keyTwo, true);
-				endTime = System.nanoTime();
-				duration = (endTime - startTime) / 1000000000;
-				taOutput.appendText("\nCipher Built in " + duration + " seconds");
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			startTime = System.nanoTime();
+			taOutput.appendText("\nBuilding Cipher...");
+			cipher = new Cipher(keyOne, keyTwo, true);
+			endTime = System.nanoTime();
+			duration = (endTime - startTime) / 1000000000;
+			taOutput.appendText("\nCipher Built in " + duration + " seconds");
 			taOutput.appendText("\nCipher Created");
 		} else {
 			taOutput.appendText("\nInvalid Passcodes, try again");

@@ -2,13 +2,15 @@ package ie.gmit.sw.threads;
 
 import java.util.concurrent.BlockingQueue;
 
-import ie.gmit.sw.ThreadedTest;
 import ie.gmit.sw.cipher.Cipher;
 
 public class ThreadedEncrypter implements Runnable {
 
+	// read clear text from this queue
 	private BlockingQueue<CharBlock> read_queue;
+	// place encrypted text on this queue
 	private BlockingQueue<CharBlock> encrypt_queue;
+	// the cipher object to be used for encryption
 	private Cipher cipher;
 
 	public ThreadedEncrypter(BlockingQueue<CharBlock> read_queue, BlockingQueue<CharBlock> encrypt_queue,
@@ -30,17 +32,13 @@ public class ThreadedEncrypter implements Runnable {
 				// read from the read_queue
 				cBlock = read_queue.take();
 				if (cBlock.getLength() == 3) {
-					if (ThreadedTest.compareToPoison(cBlock.getChars())) {
+					if (ThreadController.compareToPoison(cBlock.getChars())) {
 						keepAlive = false;
 					}
 				} else {
-					// encrypt the char block
-//					System.out.println("ENCRYPTING LENGTH: " + cBlock.getLength());
-
 					if (!(cBlock.getLength() % 2 == 0)) {
 						cBlock.setLength(cBlock.getLength() + 1);
 					}
-
 					CharBlock encBlock = new CharBlock(cipher.encrypt(cBlock.getChars(), cBlock.getLength()),
 							cBlock.getLength());
 					// and add it to the encrypt queue
@@ -48,9 +46,10 @@ public class ThreadedEncrypter implements Runnable {
 				}
 			}
 			// add a poison pill to the encrypt queue
-			this.encrypt_queue.put(ThreadedTest.PILL_BLOCK);
+			this.encrypt_queue.put(ThreadController.PILL_BLOCK);
 
 		} catch (InterruptedException e) {
+			// TODO: how to handle thread exception correctly
 			e.printStackTrace();
 		}
 

@@ -1,5 +1,10 @@
 package ie.gmit.sw.cipher;
 
+/* A simple class with one static method which converts a character 
+ * array with a supplied number of characters into an array of pairs 
+ * of integers, representing the character codes in the supplied array
+ */
+
 public class BiGram {
 
 	// takes in a character array and splits it into an array of pairs of integers,
