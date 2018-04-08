@@ -13,6 +13,7 @@ public class ThreadedEncrypter implements Runnable {
 	// the cipher object to be used for encryption
 	private Cipher cipher;
 
+	// queues from ThreadController, Cipher from MainWindowController
 	public ThreadedEncrypter(BlockingQueue<CharBlock> read_queue, BlockingQueue<CharBlock> encrypt_queue,
 			Cipher cipher) {
 		this.read_queue = read_queue;

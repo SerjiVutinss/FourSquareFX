@@ -55,6 +55,7 @@ public class ThreadedReader implements Runnable {
 			input_queue.put(ThreadController.PILL_BLOCK);
 		} catch (InterruptedException | IOException e) {
 			// files are checked in GUI so should never hit an exception here
+			// TODO: how to handle thread exception correctly
 			e.printStackTrace();
 		}
 	}
