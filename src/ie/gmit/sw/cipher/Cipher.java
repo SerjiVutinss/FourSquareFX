@@ -1,5 +1,7 @@
 package ie.gmit.sw.cipher;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -18,7 +20,7 @@ public final class Cipher {
 		this.key_two = key_two;
 
 		// build the cleartext and cipher matrices
-		
+
 		// BIG O notation within the method, below
 		buildCipher();
 
@@ -87,7 +89,7 @@ public final class Cipher {
 		char returnArray[] = new char[length];
 
 		int count = 0; // used to determine where in the return array each bigram should be placed
-		
+
 		// split the character array into an array of integer pairs,
 		// each integer represents a character code
 
@@ -141,6 +143,16 @@ public final class Cipher {
 		sb.append(CharMatrix.getArrayStringBuilder(topRightSquare));
 		sb.append(System.lineSeparator() + System.lineSeparator() + "Bottom Left Square: " + System.lineSeparator());
 		sb.append(CharMatrix.getArrayStringBuilder(bottomLeftSquare));
-		// FileHandler.outputToFile(sb, "./cipher_out.txt");
+
+		// simple file writer since contents are quite small
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter("./cipher_out.txt");
+			bw = new BufferedWriter(fw);
+			bw.write(sb.toString());
+		} catch (Exception e) {
+			// TODO: handle file not found exception
+		}
 	}
 }

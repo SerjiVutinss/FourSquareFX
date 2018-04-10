@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import ie.gmit.sw.cipher.Cipher;
-import ie.gmit.sw.cipher.KeyGenerator;
 import ie.gmit.sw.threads.ThreadController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,7 +36,7 @@ public class MainWindowController {
 	private TextArea taOutput;
 
 	@FXML
-	private Button btnGenerateCipher, btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt, btnTestKeys, btnClearOutput;
+	private Button btnChooseInput, btnChooseOutput, btnEncrypt, btnDecrypt, btnTestKeys, btnClearOutput;
 
 	@FXML
 	private Label lblCipherSet;
@@ -170,15 +169,15 @@ public class MainWindowController {
 		keyOne = tfPasscodeOne.getText().hashCode();
 		keyTwo = tfPasscodeTwo.getText().hashCode();
 
-		System.out.println(keyOne);
-		System.out.println(keyTwo);
+		// used for debugging only
+//		System.out.println(keyOne);
+//		System.out.println(keyTwo);
 
 		cipher = new Cipher(keyOne, keyTwo, true);
 		enableEncryption = cipher.testKeys();
 		if (enableEncryption) {
 			taOutput.appendText("\nKeys Accepted");
 			taOutput.appendText("\nCipher Created");
-			btnGenerateCipher.setDisable(!enableEncryption);
 			lblCipherSet.setText("TRUE");
 
 		} else {
@@ -190,36 +189,7 @@ public class MainWindowController {
 		updateUI(2);
 	}
 
-	// check that keys are valid - generate and set a cipher if so
-	@FXML
-	protected void generateCipher(ActionEvent ev) {
-
-		long keyOne, keyTwo;
-
-		// get keys
-		keyOne = tfPasscodeOne.getText().hashCode();
-		keyTwo = tfPasscodeTwo.getText().hashCode();
-
-		// check that keys are valid and generate/set cipher
-		if (KeyGenerator.keyIsValid(keyOne) && KeyGenerator.keyIsValid(keyTwo)) {
-			taOutput.appendText("\nPassscodes accepted");
-			taOutput.appendText("\nPassscode 1: " + keyOne);
-			taOutput.appendText("\nPassscode 2: " + keyTwo);
-			startTime = System.nanoTime();
-			taOutput.appendText("\nBuilding Cipher...");
-			cipher = new Cipher(keyOne, keyTwo, true);
-			endTime = System.nanoTime();
-			duration = (endTime - startTime) / 1000000000;
-			taOutput.appendText("\nCipher Built in " + duration + " seconds");
-			taOutput.appendText("\nCipher Created");
-		} else {
-			taOutput.appendText("\nInvalid Passcodes, try again");
-		}
-
-		updateUI(-1);
-	}
-
-	// could probably tidy these methods up to reduce code repetition
+	// could probably tidy these 4 file chooser methods up to reduce code repetition
 	// select an input file using the file chooser
 	@FXML
 	protected void chooseEncryptInput(ActionEvent event) {
@@ -270,8 +240,6 @@ public class MainWindowController {
 		}
 	}
 
-	// could probably tidy these methods up to reduce code repetition and better
-	// exception handling
 	// encrypt the input_file/file path and output to output_file/file path
 	@FXML
 	protected void encryptInput() {
@@ -280,8 +248,6 @@ public class MainWindowController {
 		taOutput.appendText("\n" + tc.encrypt(tfEncryptInputFile.getText(), tfEncryptOutputFile.getText()));
 	}
 
-	// could probably tidy these methods up to reduce code repetition and better
-	// exception handling
 	@FXML
 	protected void decryptInput() {
 		ThreadController tc = new ThreadController(cipher);
@@ -317,16 +283,6 @@ public class MainWindowController {
 	protected void clearOutput() {
 		taOutput.clear();
 	}
-
-	// // called after encrypting or decrypting - resets the files and file paths
-	// private void resetFiles() {
-	//
-	// input_file_encrypt = null;
-	// output_file_encrypt = null;
-	// tfEncryptInputFile.setText("");
-	// tfEncryptOutputFile.setText("");
-	// updateUI(-1);
-	// }
 
 	// simple error handler to append text to the text area
 	public void handleError(String error) {

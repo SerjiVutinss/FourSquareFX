@@ -83,11 +83,10 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Label>
-                        <Button fx:id="btnTestKeys" mnemonicParsing="false" onAction="#testKeys" text="Test Keys">
+                        <Button fx:id="btnTestKeys" mnemonicParsing="false" onAction="#testKeys" text="Check Keys">
                            <HBox.margin>
-                              <Insets right="5.0" />
+                              <Insets right="50.0" />
                            </HBox.margin></Button>
-                        <Button fx:id="btnGenerateCipher" mnemonicParsing="false" onAction="#generateCipher" text="Generate Cipher" />
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />
