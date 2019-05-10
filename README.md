@@ -1,4 +1,4 @@
-# FourSquareFX - https://github.com/SerjiVutinss/FourSquareFX
+# FourSquareFX - A four sqaure cipher implementation created in Java with a JavaFX GUI.
 
 ## Introduction
 
